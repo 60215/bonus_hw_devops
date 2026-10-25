@@ -1,0 +1,10 @@
+groups:
+  - name: url-probe
+    rules: 
+      - alert: webbieDown
+        expr: probe_success == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Website({{ $labels.url }}) is down" # TODO: ваше правило

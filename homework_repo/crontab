@@ -1,0 +1,1 @@
+* * * * * su -p  -s /bin/sh prober -c "/usr/local/bin/python3 /probe-script/probe.py /probe-script/settings/urls.txt" > /proc/1/fd/1 2> /proc/1/fd/2

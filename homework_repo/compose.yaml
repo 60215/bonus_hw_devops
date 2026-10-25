@@ -1,0 +1,35 @@
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    command:
+      - --collector.textfile.directory=/textfile   # отсюда Node Exporter читает *.prom
+    volumes:
+      - textfile:/textfile:ro
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    volumes:
+      - ./prometheus:/etc/prometheus:ro
+    ports:
+      - 127.0.0.1:9090:9090
+    restart: unless-stopped
+
+  # TODO: url-probe — должен писать url_probe.prom в тот же том textfile
+  # TODO: сайт, который можно остановить и запустить
+  url-probe:
+    build: .
+    image: url-probe
+    environment:
+      - PROBE_OUTPUT_DIR=/textfile
+    volumes:
+      - ./url-probe:/probe-script/settings
+      - textfile:/textfile
+    restart: unless-stopped
+
+  updown-webbie:
+    image: nginx
+    restart: unless-stopped  
+
+volumes:
+  textfile:
